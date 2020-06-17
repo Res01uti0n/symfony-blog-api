@@ -10,7 +10,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     attributes={"order"={"published": "DESC"}},
+ *     attributes={
+ *         "order"={"published": "DESC"},
+ *         "pagination_client_enabled"=true,
+ *         "pagination_client_items_per_page"=true
+ *     },
  *     itemOperations={
  *         "get",
  *         "put"={
@@ -20,7 +24,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     collectionOperations={
  *         "get",
  *         "post"={
- *             "access_control"="is_granted('ROLE_COMMENTATOR')"
+ *             "access_control"="is_granted('ROLE_COMMENTATOR')",
+ *             "normalization_context"={
+ *                 "groups"={"get-comment-with-author"}
+ *             }
  *         },
  *         "api_blog_posts_comments_get_subresource"={
  *             "normalization_context"={
@@ -104,7 +111,7 @@ class Comment implements AuthoredEntityInterface, PublishedDateEntityInterface
     /**
      * @return User
      */
-    public function getAuthor(): User
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -119,7 +126,7 @@ class Comment implements AuthoredEntityInterface, PublishedDateEntityInterface
         return $this;
     }
 
-    public function getBlogPost(): BlogPost
+    public function getBlogPost(): ?BlogPost
     {
         return $this->blogPost;
     }
@@ -129,5 +136,10 @@ class Comment implements AuthoredEntityInterface, PublishedDateEntityInterface
         $this->blogPost = $blogPost;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return substr($this->content, 0, 20) . '...';
     }
 }

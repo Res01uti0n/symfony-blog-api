@@ -48,6 +48,8 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/post/{slug}", name="blog_by_slug", methods={"GET"})
+     * The below annotation is not required when $post is typehinted with BlogPost
+     * and route parameter name matches any field on the BlogPost entity
      * @ParamConverter("post", class="App:BlogPost", options={"mapping": {"slug": "slug"}})
      */
     public function postBySlug(BlogPost $post)

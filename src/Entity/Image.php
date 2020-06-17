@@ -13,7 +13,10 @@ use App\Controller\UploadImageAction;
  * @ORM\Entity()
  * @Vich\Uploadable()
  * @ApiResource(
- *     attributes={"order"={"id": "ASC"}},
+ *     attributes={
+ *         "order"={"id": "ASC"},
+ *         "formats"={"json", "jsonld", "form"={"multipart/form-data"}}
+ *     },
  *     collectionOperations={
  *         "get",
  *         "post"={
@@ -21,6 +24,12 @@ use App\Controller\UploadImageAction;
  *             "path"="/images",
  *             "controller"=UploadImageAction::class,
  *             "defaults"={"_api_receive"=false}
+ *         }
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "delete"={
+ *             "access_control"="is_granted('ROLE_WRITER')"
  *         }
  *     }
  * )
@@ -69,5 +78,10 @@ class Image
     public function setUrl($url): void
     {
         $this->url = $url;
+    }
+
+    public function __toString()
+    {
+        return $this->id . ':' . $this->url;
     }
 }
