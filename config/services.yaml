@@ -22,6 +22,11 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+    
+    App\Serializer\UserAttributeNormalizer:
+        arguments: ['@security.token_storage']
+        tags:
+            - { name: 'serializer.normalizer', priority: 64 }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
