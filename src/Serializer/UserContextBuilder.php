@@ -44,7 +44,8 @@ class UserContextBuilder implements SerializerContextBuilderInterface
             $request, $normalization, $extractedAttributes
         );
 
-        $resourceClass = $context['resource_class'] ?? null;
+        // Class being serialized/deserialized
+        $resourceClass = $context['resource_class'] ?? null; // Default to null if not set
 
         if (
             User::class === $resourceClass &&
